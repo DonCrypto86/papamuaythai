@@ -4,7 +4,11 @@ const product = (id: string, name: string, price: number, category: Category, va
   id, name, brand: "Papa Muay Thai", reference: `PMT-${id.padStart(3, "0")}`, price, category,
   sizes: variants,
   short_note: note,
-  image_url: Number(id) <= 27 ? `/products/${id.padStart(2, "0")}.webp` : "/products/placeholder.svg",
+  image_url: category === "bebidas"
+    ? "/brand/papa-muay-thai-logo.webp"
+    : Number(id) <= 27
+      ? `/products/${id.padStart(2, "0")}.webp`
+      : "/products/placeholder.svg",
   status: "published",
   is_new: false,
   is_offer: false
