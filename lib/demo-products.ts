@@ -2,7 +2,12 @@ import type { Category, Product } from "./types";
 
 const product = (id: string, name: string, price: number, category: Category, variants = "", note = ""): Product => ({
   id, name, brand: "Papa Muay Thai", reference: `PMT-${id.padStart(3, "0")}`, price, category,
-  sizes: variants, short_note: note, image_url: "/products/placeholder.svg", status: "published", is_new: false, is_offer: false
+  sizes: variants,
+  short_note: note,
+  image_url: Number(id) <= 27 ? `/products/${id.padStart(2, "0")}.webp` : "/products/placeholder.svg",
+  status: "published",
+  is_new: false,
+  is_offer: false
 });
 
 export const demoProducts: Product[] = [
