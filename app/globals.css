@@ -192,22 +192,41 @@ footer { position:relative;z-index:2;min-height:130px;display:flex;align-items:c
 .thai-nav { min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:20px; }
 .thai-wordmark { display:flex;align-items:center;gap:10px;color:var(--thai-green);font:800 20px/1 Inter,Arial,sans-serif;letter-spacing:.08em; }
 .thai-wordmark img { width:58px;height:58px;object-fit:contain;border-radius:50%; }
-.thai-nav>a:last-child,.thai-cta a { display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:99px;background:var(--thai-green);color:white;padding:11px 17px;font-weight:700; }
-.thai-hero { position:relative;isolation:isolate;overflow:hidden;min-height:470px;display:flex;align-items:center;background:#100e0b; }
+.thai-nav-actions { display:flex;align-items:center;gap:15px; }
+.thai-wendelo-credit { display:inline-flex;align-items:center;gap:6px;color:#756d61;font:600 8px/1.2 Inter,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase; }
+.thai-wendelo-credit img { width:20px;height:18px;object-fit:contain; }
+.thai-wendelo-credit strong { color:#342f28;font-size:8px;text-transform:none; }
+.thai-whatsapp-icon { width:44px;height:44px;display:grid;place-items:center;border:1px solid #214b3635;border-radius:50%;background:#fff;color:#16854f;box-shadow:0 6px 18px #17120b12;transition:transform .2s ease,box-shadow .2s ease; }
+.thai-whatsapp-icon:hover { transform:translateY(-2px);box-shadow:0 10px 24px #17120b20; }
+.thai-cta a { display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:99px;background:var(--thai-green);color:white;padding:11px 17px;font-weight:700; }
+.thai-hero { position:sticky;top:72px;z-index:1;isolation:isolate;overflow:hidden;min-height:470px;display:flex;align-items:center;background:#100e0b; }
 .thai-hero::before { content:"";position:absolute;z-index:-2;inset:-35%;background:radial-gradient(circle at 18% 28%,#725326 0,transparent 25%),radial-gradient(circle at 82% 22%,#3f3220 0,transparent 28%),radial-gradient(circle at 70% 82%,#9b743533 0,transparent 30%),linear-gradient(125deg,#090807 10%,#1d1913 48%,#0b0a08 88%);background-size:140% 140%;animation:thai-hero-mesh 16s ease-in-out infinite alternate; }
 .thai-hero::after { content:"";position:absolute;z-index:-1;width:min(60vw,760px);aspect-ratio:1;right:-10%;top:-55%;border-radius:50%;background:radial-gradient(circle,#dfbd7440 0,#b88b3624 34%,transparent 70%);filter:blur(14px);animation:thai-hero-glow 9s ease-in-out infinite alternate; }
+.thai-lottie { position:absolute;z-index:0;right:-3%;top:50%;width:min(620px,52vw);height:min(620px,52vw);border:0;transform:translateY(-50%);opacity:.2;mix-blend-mode:screen;pointer-events:none;filter:sepia(.7) saturate(.7) hue-rotate(350deg) brightness(.9); }
 .thai-hero .shell { position:relative;z-index:1;padding-block:70px; }.thai-hero h1 { color:#fff9ec;white-space:normal;text-shadow:0 2px 24px #0008; }.thai-hero h1 em { color:#d9b768; }
 .thai-hero p { color:#ddd3c2;font-size:18px;line-height:1.6;margin:0 0 28px; }.thai-hero .primary { background:linear-gradient(135deg,#e1c078,#b78a3b);color:#15110b;box-shadow:0 12px 30px #0005; }
 .thai-hero .eyebrow { color:#ddb969; }.catalog .eyebrow { color:var(--thai-red); }.filters button.active { background:var(--thai-green);border-color:var(--thai-green); }
+.thai-catalog { z-index:3;margin-top:-28px;padding-top:50px;border-radius:30px 30px 0 0; }
+.thai-catalog::before { border-radius:30px 30px 0 0;box-shadow:0 -18px 42px #08060420; }
+.thai-filters { display:flex;align-items:center;gap:8px;overflow:visible; }
+.thai-filter-row { display:flex;align-items:center;gap:8px; }
 
 @keyframes thai-hero-mesh { to { transform:translate3d(-4%,3%,0) scale(1.08);background-position:75% 35%; } }
 @keyframes thai-hero-glow { to { transform:translate3d(-18%,24%,0) scale(1.18);opacity:.7; } }
 
 @media (prefers-reduced-motion:reduce) {
-  .thai-hero::before,.thai-hero::after { animation:none; }
+  .thai-hero::before,.thai-hero::after { animation:none; }.thai-lottie { display:none; }
 }
 .product-variants { min-height:3.8em;line-height:1.45!important; }.thai-cta { padding:70px 0;background:var(--thai-red);color:#fff; }.thai-cta h2 { margin:8px 0 24px; }.thai-cta a { background:#fff;color:var(--thai-green);width:max-content; }
 .thai-footer { min-height:110px;display:flex;align-items:center;justify-content:space-between;gap:20px;color:var(--thai-green); }.thai-footer>a { display:flex;align-items:center;gap:7px;font-size:11px;color:#6f6a62; }
 .thai-footer-brand { display:flex;align-items:center;gap:9px; }.thai-footer-brand img { border-radius:50%;object-fit:contain; }
 .admin-brand strong { color:var(--thai-green);font:800 20px/1.1 Inter,Arial,sans-serif;letter-spacing:.06em; }
-@media(max-width:640px){.thai-wordmark{font-size:14px;gap:7px}.thai-wordmark img{width:48px;height:48px}.thai-nav>a:last-child{width:42px;height:42px;padding:0;font-size:0}.thai-hero{min-height:420px}.thai-hero .shell{padding-block:50px}.thai-hero p{font-size:15px}.thai-footer{align-items:flex-start;flex-direction:column;justify-content:center}.filters{margin-top:20px}.product-variants{font-size:10px!important}}
+@media(max-width:640px){
+  .thai-wordmark{font-size:14px;gap:7px}.thai-wordmark img{width:48px;height:48px}
+  .thai-nav-actions{gap:8px}.thai-whatsapp-icon{width:42px;height:42px;flex:none}.thai-wendelo-credit{gap:4px;font-size:6.5px;letter-spacing:.01em}.thai-wendelo-credit img{width:17px;height:16px}.thai-wendelo-credit strong{font-size:6.5px}
+  .thai-hero{top:72px;min-height:420px}.thai-hero .shell{padding-block:50px}.thai-hero p{font-size:15px}.thai-lottie{right:-38%;width:470px;height:470px;opacity:.18}
+  .thai-catalog{margin-top:-22px;padding-top:38px;border-radius:24px 24px 0 0}.thai-catalog::before{border-radius:24px 24px 0 0}
+  .thai-filters{display:grid;gap:6px;margin:20px 0 26px;overflow:visible}.thai-filter-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}.thai-filter-row:last-child{grid-template-columns:repeat(5,minmax(0,1fr))}
+  .thai-filters button{min-width:0;padding:7px 3px;font-size:8.8px;line-height:1.05;white-space:normal}.thai-filters .price-sort{justify-content:center;margin-left:0;gap:2px}.thai-filters .price-sort svg{width:10px;height:10px;flex:none}
+  .thai-footer{align-items:flex-start;flex-direction:column;justify-content:center}.product-variants{font-size:10px!important}
+}
