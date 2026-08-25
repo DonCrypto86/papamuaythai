@@ -214,6 +214,9 @@ footer { position:relative;z-index:2;min-height:130px;display:flex;align-items:c
 .thai-wordmark { display:flex;align-items:center;gap:10px;color:var(--thai-green);font:800 20px/1 Inter,Arial,sans-serif;letter-spacing:.08em; }
 .thai-wordmark img { width:58px;height:58px;object-fit:contain;border-radius:50%; }
 .thai-nav-actions { display:flex;align-items:center;gap:15px; }
+.language-switch { display:inline-flex;align-items:center;gap:2px;padding:3px;border:1px solid #214b3624;border-radius:999px;background:#fff9;box-shadow:0 4px 14px #17120b0b; }
+.language-switch button { min-width:31px;height:29px;padding:0 7px;border:0;border-radius:999px;background:transparent;color:#6f685d;font:700 10px/1 Inter,Arial,sans-serif;letter-spacing:.04em;cursor:pointer;transition:background .2s ease,color .2s ease,box-shadow .2s ease; }
+.language-switch button.active { background:var(--thai-green);color:#fff;box-shadow:0 3px 10px #214b3630; }
 .thai-wendelo-credit { display:inline-flex;align-items:center;gap:6px;color:#756d61;font:600 8px/1.2 Inter,Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase; }
 .thai-wendelo-credit img { width:20px;height:18px;object-fit:contain; }
 .thai-wendelo-credit strong { color:#342f28;font-size:8px;text-transform:none; }
@@ -244,7 +247,7 @@ footer { position:relative;z-index:2;min-height:130px;display:flex;align-items:c
 .admin-brand strong { color:var(--thai-green);font:800 20px/1.1 Inter,Arial,sans-serif;letter-spacing:.06em; }
 @media(max-width:640px){
   .thai-wordmark{font-size:14px;gap:7px}.thai-wordmark img{width:48px;height:48px}
-  .thai-nav-actions{gap:8px}.thai-whatsapp-icon{width:42px;height:42px;flex:none}.thai-wendelo-credit{gap:4px;font-size:6.5px;letter-spacing:.01em}.thai-wendelo-credit img{width:17px;height:16px}.thai-wendelo-credit strong{font-size:6.5px}
+  .thai-nav-actions{gap:6px}.language-switch{padding:2px;gap:1px}.language-switch button{min-width:27px;height:27px;padding:0 5px;font-size:8px}.thai-whatsapp-icon{width:40px;height:40px;flex:none}.thai-wendelo-credit{display:none}
   .thai-hero{top:72px;min-height:420px}.thai-hero .shell{padding-block:50px}.thai-hero p{font-size:15px}.thai-lottie{right:-38%;width:470px;height:470px;opacity:.18}
   .thai-catalog{margin-top:-22px;padding-top:38px;border-radius:24px 24px 0 0}.thai-catalog::before{border-radius:24px 24px 0 0}
   .thai-filters{display:grid;gap:6px;margin:20px 0 26px;overflow:visible}.thai-filter-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}.thai-filter-row:last-child{grid-template-columns:repeat(5,minmax(0,1fr))}

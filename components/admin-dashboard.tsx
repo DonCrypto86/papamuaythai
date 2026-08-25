@@ -137,10 +137,46 @@ function ProductModal({ product, tenantId, tenantSlug, close, saved, busy, setBu
         image_url = supabase.storage.from("product-images").getPublicUrl(path).data.publicUrl;
       }
       if (!image_url) throw new Error("Elegí una imagen.");
-      const payload = { tenant_id: tenantId, name:String(form.get("name")), brand:String(form.get("brand")), reference:String(form.get("reference")), price:Number(form.get("price")), category:String(form.get("category")), sizes:String(form.get("sizes") ?? ""), color:String(form.get("color") ?? ""), short_note:String(form.get("short_note") ?? ""), status:String(form.get("status")), is_new:form.get("is_new") === "on", is_offer:form.get("is_offer") === "on", image_url };
+      const payload = {
+        tenant_id: tenantId,
+        name: String(form.get("name")),
+        name_de: String(form.get("name_de") ?? ""),
+        name_en: String(form.get("name_en") ?? ""),
+        brand: String(form.get("brand")),
+        reference: String(form.get("reference")),
+        price: Number(form.get("price")),
+        category: String(form.get("category")),
+        sizes: String(form.get("sizes") ?? ""),
+        sizes_de: String(form.get("sizes_de") ?? ""),
+        sizes_en: String(form.get("sizes_en") ?? ""),
+        color: String(form.get("color") ?? ""),
+        short_note: String(form.get("short_note") ?? ""),
+        short_note_de: String(form.get("short_note_de") ?? ""),
+        short_note_en: String(form.get("short_note_en") ?? ""),
+        status: String(form.get("status")),
+        is_new: form.get("is_new") === "on",
+        is_offer: form.get("is_offer") === "on",
+        image_url,
+      };
       const query = product ? supabase.from("products").update(payload).eq("id", product.id).eq("tenant_id", tenantId).select().single() : supabase.from("products").insert(payload).select().single();
       const { data, error } = await query; if (error) throw error; saved(data as Product);
     } catch (error) { alert(error instanceof Error ? error.message : "No se pudo guardar."); } finally { setBusy(false); }
   }
-  return <div className="modal-backdrop"><div className="modal"><div className="modal-head"><div><span className="eyebrow">Producto</span><h2>{product ? "Editar producto" : "Agregar producto"}</h2></div><button onClick={close}><X/></button></div><form className="product-form" onSubmit={submit}><label className="upload"><Upload/><span>{product ? "Cambiar imagen" : "Elegir imagen"}</span><small>JPG, PNG o WebP</small><input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" capture="environment" required={!product}/></label><div className="form-grid"><label>Nombre<input name="name" defaultValue={product?.name} required /></label><label>Marca<input name="brand" defaultValue={product?.brand ?? "Papa Muay Thai"} required /></label><label>Referencia<input name="reference" defaultValue={product?.reference} required /></label><label>Precio en Gs.<input name="price" type="number" min="0" step="1000" defaultValue={product?.price} required /></label><label>Categoría<select name="category" defaultValue={product?.category ?? "entradas"}><option value="entradas">Aperitivos</option><option value="fideos_arroz">Fideos y arroz</option><option value="currys_sopas">Currys y sopas</option><option value="pescados">Pescados</option><option value="especialidades">Especialidades</option><option value="postres">Postres</option><option value="bebidas">Bebidas</option></select></label><label>Estado<select name="status" defaultValue={product?.status ?? "published"}><option value="published">Publicado</option><option value="hidden">Oculto</option></select></label><label>Variantes y precios<input name="sizes" defaultValue={product?.sizes}/></label><label>Detalle opcional<input name="color" defaultValue={product?.color}/></label><label className="wide">Descripción corta<input name="short_note" defaultValue={product?.short_note}/></label></div><div className="checks"><label><input name="is_new" type="checkbox" defaultChecked={product?.is_new}/> Nuevo</label><label><input name="is_offer" type="checkbox" defaultChecked={product?.is_offer}/> Oferta</label></div><button className="save" disabled={busy}>{busy ? "Guardando…" : "Guardar producto"}</button></form></div></div>;
+  return <div className="modal-backdrop"><div className="modal"><div className="modal-head"><div><span className="eyebrow">Producto</span><h2>{product ? "Editar producto" : "Agregar producto"}</h2></div><button onClick={close}><X/></button></div><form className="product-form" onSubmit={submit}><label className="upload"><Upload/><span>{product ? "Cambiar imagen" : "Elegir imagen"}</span><small>JPG, PNG o WebP</small><input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" capture="environment" required={!product}/></label><div className="form-grid">
+    <label>Nombre (español)<input name="name" defaultValue={product?.name} required /></label>
+    <label>Name (Deutsch)<input name="name_de" defaultValue={product?.name_de}/></label>
+    <label>Name (English)<input name="name_en" defaultValue={product?.name_en}/></label>
+    <label>Marca<input name="brand" defaultValue={product?.brand ?? "Papa Muay Thai"} required /></label>
+    <label>Referencia<input name="reference" defaultValue={product?.reference} required /></label>
+    <label>Precio en Gs.<input name="price" type="number" min="0" step="1000" defaultValue={product?.price} required /></label>
+    <label>Categoría<select name="category" defaultValue={product?.category ?? "entradas"}><option value="entradas">Aperitivos</option><option value="fideos_arroz">Fideos y arroz</option><option value="currys_sopas">Currys y sopas</option><option value="pescados">Pescados</option><option value="especialidades">Especialidades</option><option value="postres">Postres</option><option value="bebidas">Bebidas</option></select></label>
+    <label>Estado<select name="status" defaultValue={product?.status ?? "published"}><option value="published">Publicado</option><option value="hidden">Oculto</option></select></label>
+    <label>Variantes y precios (ES)<input name="sizes" defaultValue={product?.sizes}/></label>
+    <label>Varianten und Preise (DE)<input name="sizes_de" defaultValue={product?.sizes_de}/></label>
+    <label>Variants and prices (EN)<input name="sizes_en" defaultValue={product?.sizes_en}/></label>
+    <label>Detalle opcional<input name="color" defaultValue={product?.color}/></label>
+    <label className="wide">Descripción corta (ES)<input name="short_note" defaultValue={product?.short_note}/></label>
+    <label className="wide">Kurzbeschreibung (DE)<input name="short_note_de" defaultValue={product?.short_note_de}/></label>
+    <label className="wide">Short description (EN)<input name="short_note_en" defaultValue={product?.short_note_en}/></label>
+  </div><div className="checks"><label><input name="is_new" type="checkbox" defaultChecked={product?.is_new}/> Nuevo</label><label><input name="is_offer" type="checkbox" defaultChecked={product?.is_offer}/> Oferta</label></div><button className="save" disabled={busy}>{busy ? "Guardando…" : "Guardar producto"}</button></form></div></div>;
 }
