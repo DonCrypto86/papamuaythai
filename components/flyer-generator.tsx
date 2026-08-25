@@ -53,7 +53,7 @@ export function FlyerGenerator({ products, catalogName, catalogSubtitle, theme }
     const catalogUrl = window.location.origin;
     const shareData = {
       title: `${catalogName} · Catálogo`,
-      text: `Mirá nuestros productos y el catálogo completo:\n${catalogUrl}`,
+      text: "Mirá nuestros productos y el catálogo completo:",
       url: catalogUrl,
       files: [flyerFile]
     };
