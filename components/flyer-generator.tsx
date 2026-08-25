@@ -12,12 +12,13 @@ type Props = {
   products: Product[];
   catalogName: string;
   catalogSubtitle: string;
+  catalogLogoUrl: string;
   theme: FlyerTheme;
 };
 
 const flyerSize = { width: 1080, height: 1920 };
 
-export function FlyerGenerator({ products, catalogName, catalogSubtitle, theme }: Props) {
+export function FlyerGenerator({ products, catalogName, catalogSubtitle, catalogLogoUrl, theme }: Props) {
   const [previewUrl, setPreviewUrl] = useState<string>();
   const [flyerFile, setFlyerFile] = useState<File>();
   const [generating, setGenerating] = useState(false);
@@ -37,7 +38,7 @@ export function FlyerGenerator({ products, catalogName, catalogSubtitle, theme }
     setGenerating(true);
     try {
       const selected = shuffle(published).slice(0, 4);
-      const file = await renderFlyer(selected, catalogName, catalogSubtitle, theme);
+      const file = await renderFlyer(selected, catalogName, catalogSubtitle, catalogLogoUrl, theme);
       if (previewUrl) URL.revokeObjectURL(previewUrl);
       setFlyerFile(file);
       setPreviewUrl(URL.createObjectURL(file));
@@ -53,8 +54,7 @@ export function FlyerGenerator({ products, catalogName, catalogSubtitle, theme }
     const catalogUrl = window.location.origin;
     const shareData = {
       title: `${catalogName} · Catálogo`,
-      text: "Mirá nuestros productos y el catálogo completo:",
-      url: catalogUrl,
+      text: `Mirá nuestros productos y el catálogo completo:\n${catalogUrl}`,
       files: [flyerFile]
     };
 
@@ -79,7 +79,7 @@ export function FlyerGenerator({ products, catalogName, catalogSubtitle, theme }
 
   return <>
     <button type="button" className="flyer-trigger" onClick={createFlyer} disabled={generating}>
-      <LayoutGrid size={19}/> {generating ? "Creando flyer…" : "Crear flyer"}
+      <LayoutGrid size={19}/> {generating ? "Creando flyer…" : "Crear flyer para Estado"}
     </button>
 
     {previewUrl && flyerFile && <div className="flyer-backdrop" role="dialog" aria-modal="true" aria-label="Vista previa del flyer">
@@ -106,7 +106,7 @@ function shuffle<T>(items: T[]) {
   return copy;
 }
 
-async function renderFlyer(products: Product[], catalogName: string, subtitle: string, theme: FlyerTheme) {
+async function renderFlyer(products: Product[], catalogName: string, subtitle: string, catalogLogoUrl: string, theme: FlyerTheme) {
   const canvas = document.createElement("canvas");
   canvas.width = flyerSize.width;
   canvas.height = flyerSize.height;
@@ -122,6 +122,9 @@ async function renderFlyer(products: Product[], catalogName: string, subtitle: s
   context.fillStyle = background;
   context.fillRect(0, 0, flyerSize.width, flyerSize.height);
 
+  await drawContainedMark(context, catalogLogoUrl, 34, 30, 100, 76, 0.95);
+  await drawContainedMark(context, "/brand/wendelo-mark.png", 994, 34, 52, 52, 0.82);
+
   context.textAlign = "center";
   context.fillStyle = palette.accent;
   context.font = "700 34px Arial, sans-serif";
@@ -134,10 +137,10 @@ async function renderFlyer(products: Product[], catalogName: string, subtitle: s
   context.fillText(subtitle, 540, 245);
 
   const cardWidth = 454;
-  const cardHeight = 610;
-  const gap = 34;
+  const cardHeight = 555;
+  const gap = 26;
   const startX = (flyerSize.width - cardWidth * 2 - gap) / 2;
-  const startY = 310;
+  const startY = 280;
 
   for (let index = 0; index < products.length; index++) {
     const product = products[index];
@@ -149,35 +152,53 @@ async function renderFlyer(products: Product[], catalogName: string, subtitle: s
     context.fillStyle = palette.card;
     context.fill();
 
-    await drawProductImage(context, product.image_url, x, y, cardWidth, 410, 34, palette.bottom);
+    await drawProductImage(context, product.image_url, x, y, cardWidth, 360, 34, palette.bottom);
     context.textAlign = "left";
     context.fillStyle = palette.ink;
     context.font = "700 38px Georgia, serif";
     const lines = wrapText(context, product.name, cardWidth - 52, 2);
-    lines.forEach((line, lineIndex) => context.fillText(line, x + 26, y + 466 + lineIndex * 44));
+    lines.forEach((line, lineIndex) => context.fillText(line, x + 26, y + 414 + lineIndex * 40));
     context.fillStyle = palette.accent;
     context.font = "800 36px Arial, sans-serif";
-    context.fillText(formatGuarani(product.price), x + 26, y + 575);
+    context.fillText(formatGuarani(product.price), x + 26, y + 525);
   }
 
   const catalogUrl = window.location.origin.replace(/^https?:\/\//, "");
   context.textAlign = "center";
   context.fillStyle = theme === "thai" ? "#fffaf0" : palette.ink;
   context.font = "700 47px Georgia, serif";
-  context.fillText("Mirá todos nuestros productos", 540, 1690);
+  context.fillText("Mirá todos nuestros productos", 540, 1490);
   context.fillStyle = palette.accent;
-  drawRoundedRect(context, 150, 1740, 780, 92, 46);
+  drawRoundedRect(context, 150, 1540, 780, 92, 46);
   context.fill();
   context.fillStyle = "#ffffff";
   context.font = "700 31px Arial, sans-serif";
-  context.fillText(catalogUrl, 540, 1798);
+  context.fillText(catalogUrl, 540, 1598);
   context.fillStyle = theme === "thai" ? "#d7c9ab" : palette.soft;
   context.font = "400 24px Arial, sans-serif";
-  context.fillText("Abrí el enlace y consultanos directamente", 540, 1870);
+  context.fillText("Abrí el enlace y consultanos directamente", 540, 1680);
 
   const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.92));
   if (!blob) throw new Error("No se pudo guardar el flyer.");
   return new File([blob], `flyer-${Date.now()}.jpg`, { type: "image/jpeg" });
+}
+
+async function drawContainedMark(context: CanvasRenderingContext2D, url: string, x: number, y: number, width: number, height: number, alpha: number) {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) return;
+    const bitmap = await createImageBitmap(await response.blob());
+    const scale = Math.min(width / bitmap.width, height / bitmap.height);
+    const drawWidth = bitmap.width * scale;
+    const drawHeight = bitmap.height * scale;
+    context.save();
+    context.globalAlpha = alpha;
+    context.drawImage(bitmap, x + (width - drawWidth) / 2, y + (height - drawHeight) / 2, drawWidth, drawHeight);
+    context.restore();
+    bitmap.close();
+  } catch {
+    // El flyer sigue siendo utilizable si un sello no se puede cargar.
+  }
 }
 
 async function drawProductImage(context: CanvasRenderingContext2D, url: string, x: number, y: number, width: number, height: number, radius: number, fallback: string) {
